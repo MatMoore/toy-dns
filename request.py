@@ -3,9 +3,9 @@ import random
 import socket
 from dns import dns_name, DNSHeader, DNSQuestion, Flag, Class
 
-def build_query(id, domain_name, record_type):
+def build_query(id, domain_name, record_type, flags=Flag.RECURSION_DESIRED):
     name = dns_name(domain_name)
-    header = DNSHeader(id=id, flags=Flag.RECURSION_DESIRED, num_questions=1)
+    header = DNSHeader(id=id, flags=flags, num_questions=1)
     question = DNSQuestion(dns_name=name, type_=record_type, class_=Class.IN)
 
     return header.pack() + question.pack()
