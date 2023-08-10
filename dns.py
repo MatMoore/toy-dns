@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 import struct
-import socket
-import random
 from enum import IntEnum
 
 class Flag(IntEnum):
@@ -79,7 +77,7 @@ class DNSHeader:
 
 @dataclass
 class DNSQuestion:
-    name: bytes
+    dns_name: bytes
     type_: int
     class_: int
 
@@ -87,14 +85,14 @@ class DNSQuestion:
         """
         Encode into a big-endian bytestring
         """
-        return self.name + struct.pack(
+        return self.dns_name + struct.pack(
             "!HH",
             self.type_,
             self.class_
         )
 
 
-def encode_dns_name(domain_name):
+def dns_name(domain_name):
     """
     Domain names are represented as a sequence of labels,
     where each label consists of a length octet followed by that
@@ -114,24 +112,3 @@ def encode_dns_name(domain_name):
     result.append(0)
 
     return bytes(result)
-
-
-def build_query(id, domain_name, record_type):
-    name = encode_dns_name(domain_name)
-    header = DNSHeader(id=id, flags=Flag.RECURSION_DESIRED, num_questions=1)
-    question = DNSQuestion(name=name, type_=record_type, class_=Class.IN)
-
-    return header.pack() + question.pack()
-
-
-if __name__ == '__main__':
-    id = random.randint(0, 65535)
-    query = build_query(id=id, domain_name="www.example.com", record_type=QType.A)
-
-    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    sock.sendto(query, ("8.8.8.8", 53))
-
-    # read the response. UDP DNS responses are usually less than 512 bytes
-    # (see https://www.netmeister.org/blog/dns-size.html for MUCH more on that)
-    # so reading 1024 bytes is enough
-    response, _ = sock.recvfrom(1024)
