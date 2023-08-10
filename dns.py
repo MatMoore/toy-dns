@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import struct
 from enum import IntEnum
+from typing import List
 
 class Flag(IntEnum):
     RECURSION_DESIRED = 1 << 8
@@ -90,6 +91,24 @@ class DNSQuestion:
             self.type_,
             self.class_
         )
+
+
+@dataclass
+class DNSRecord:
+    dns_name: bytes
+    type_: int # e.g. A
+    class_: int # e.g. IN
+    ttl: int # how long to cache for
+    data: bytes # e.g. the IP address for A records
+
+
+@dataclass
+class DNSPacket:
+    header: DNSHeader
+    questions: List[DNSQuestion]
+    answers: List[DNSRecord]
+    authorities: List[DNSRecord]
+    additionals: List[DNSRecord]
 
 
 def dns_name(domain_name):

@@ -1,4 +1,5 @@
 import unittest
+from io import BytesIO
 from dns import DNSHeader, dns_name
 
 class TestDNS(unittest.TestCase):
