@@ -11,8 +11,12 @@ def build_query(id, domain_name, record_type):
     return header.pack() + question.pack()
 
 
+def generate_id():
+    return random.randint(0, 65535)
+
+
 if __name__ == '__main__':
-    id = random.randint(0, 65535)
+    id = generate_id()
     query = build_query(id=id, domain_name="www.example.com", record_type=QType.A)
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
