@@ -108,6 +108,9 @@ class DNSPacket:
     questions: List[DNSQuestion]
     answers: List[DNSRecord]
     authorities: List[DNSRecord]
+
+    # additional records complement particular types of answers
+    # e.g. NS records are associated with additional A records
     additionals: List[DNSRecord]
 
 

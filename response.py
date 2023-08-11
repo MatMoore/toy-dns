@@ -1,4 +1,4 @@
-from dns import DNSHeader, DNSQuestion, DNSRecord, DNSPacket
+from dns import DNSHeader, DNSQuestion, DNSRecord, DNSPacket, QType
 from io import BytesIO
 import struct
 
@@ -78,5 +78,9 @@ def parse_record(reader):
     data = reader.read(10)
     type_, class_, ttl, data_len = struct.unpack("!HHIH", data)
 
-    data = reader.read(data_len)
+    if type_ == QType.NS:
+      data = decode_name(reader)
+    else:
+      data = reader.read(data_len)
+
     return DNSRecord(name, type_, class_, ttl, data)
