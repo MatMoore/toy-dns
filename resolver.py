@@ -1,3 +1,9 @@
+"""
+A toy DNS resolver, that resolves domain names to IP addresses by recursively
+querying nameservers.
+
+This does minimal validation of the records returned by the nameservers.
+"""
 import socket
 import sys
 from request import build_query, generate_id
