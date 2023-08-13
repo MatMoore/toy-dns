@@ -80,7 +80,7 @@ class DNSHeader:
 class DNSQuestion:
     dns_name: bytes
     type_: int
-    class_: int
+    class_: int = Class.IN
 
     def pack(self):
         """
@@ -97,9 +97,9 @@ class DNSQuestion:
 class DNSRecord:
     dns_name: bytes
     type_: int # e.g. A
-    class_: int # e.g. IN
-    ttl: int # how long to cache for
-    data: bytes # e.g. the IP address for A records
+    class_: int = Class.IN
+    ttl: int = 0 # how long to cache for
+    data: bytes = bytes() # e.g. the IP address for A records
 
 
 @dataclass
