@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import struct
 from enum import IntEnum
 from typing import List
@@ -105,13 +105,13 @@ class DNSRecord:
 @dataclass
 class DNSPacket:
     header: DNSHeader
-    questions: List[DNSQuestion]
-    answers: List[DNSRecord]
-    authorities: List[DNSRecord]
+    questions: List[DNSQuestion] = field(default_factory=list)
+    answers: List[DNSRecord] = field(default_factory=list)
+    authorities: List[DNSRecord] = field(default_factory=list)
 
     # additional records complement particular types of answers
     # e.g. NS records are associated with additional A records
-    additionals: List[DNSRecord]
+    additionals: List[DNSRecord] = field(default_factory=list)
 
 
 def dns_name(domain_name):

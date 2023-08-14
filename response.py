@@ -78,7 +78,7 @@ def parse_record(reader):
     data = reader.read(10)
     type_, class_, ttl, data_len = struct.unpack("!HHIH", data)
 
-    if type_ == QType.NS:
+    if type_ in (QType.NS, QType.CNAME):
       data = decode_name(reader)
     else:
       data = reader.read(data_len)
